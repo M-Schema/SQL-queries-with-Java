@@ -27,15 +27,15 @@ public class G {
 		input = JOptionPane.showInputDialog("Projektnummer eingeben (1 oder 2)");
 
 		
-		sql = "SELECT projekt.pnr AS Projektnummer, "
-				+ "		  projekt.name AS Projektname, "
-				+ "       COUNT(mitarbeit_projekt.mnr) AS Mitarbeiterzahl "
-				+ "  FROM mitarbeit_projekt "
-				+ "       INNER JOIN "
-				+ "       projekt ON mitarbeit_projekt.pnr = projekt.pnr "
-				+ " WHERE projekt.pnr LIKE '" + input + "' "
-				+ " GROUP BY Projektnummer "
-				;
+		sql = "	   SELECT projekt.pnr AS Projektnummer, "
+			+ "       projekt.name AS Projektname, "
+			+ "       COUNT(mitarbeit_projekt.mnr) AS Mitarbeiterzahl "
+			+ "  FROM mitarbeit_projekt "
+			+ "       INNER JOIN "
+			+ "       projekt ON mitarbeit_projekt.pnr = projekt.pnr "
+			+ " WHERE projekt.pnr LIKE '" + input + "' "
+			+ " GROUP BY Projektnummer "
+			;
 
 		rs = db.executeSelect(sql);
 		if (rs.next() == true) {
@@ -51,17 +51,17 @@ public class G {
 		}
 
 		
-		sql = "    SELECT mitarbeit_projekt.mnr, "
-				+ "       mitarbeiter.name AS Nachname, "
-				+ "       mitarbeit_projekt.prozent_arbzeit AS ProzentArbeitszeit "
-				+ "  FROM mitarbeit_projekt "
-				+ "       INNER JOIN "
-				+ "       projekt ON mitarbeit_projekt.pnr = projekt.pnr "
-				+ "       INNER JOIN "
-				+ "       mitarbeiter ON mitarbeit_projekt.mnr = mitarbeiter.mnr "
-				+ " WHERE projekt.pnr LIKE '" + input + "' "
-				+ " ORDER BY mitarbeit_projekt.mnr ASC "
-				; 
+		sql = "	   SELECT mitarbeit_projekt.mnr, "
+			+ "       mitarbeiter.name AS Nachname, "
+			+ "       mitarbeit_projekt.prozent_arbzeit AS ProzentArbeitszeit "
+			+ "  FROM mitarbeit_projekt "
+			+ "       INNER JOIN "
+			+ "       projekt ON mitarbeit_projekt.pnr = projekt.pnr "
+			+ "       INNER JOIN "
+			+ "       mitarbeiter ON mitarbeit_projekt.mnr = mitarbeiter.mnr "
+			+ " WHERE projekt.pnr LIKE '" + input + "' "
+			+ " ORDER BY mitarbeit_projekt.mnr ASC "
+			; 
 
 		rs = db.executeSelect(sql);
 		if (rs.next() == true) {
