@@ -24,14 +24,14 @@ public class H {
 		db = new DBHandler("Mitarbeiter.db");
 		input = JOptionPane.showInputDialog("Mitarbeiternummer eingeben:");
 
-		sql = "SELECT mitarbeit_projekt.mnr AS MNR, "
-				+ "       projekt.name AS Projektname, "
-				+ "       mitarbeit_projekt.prozent_arbzeit AS ProzentArbeitszeit "
-				+ "  FROM mitarbeit_projekt "
-				+ "       INNER JOIN "
-				+ "       projekt ON mitarbeit_projekt.pnr = projekt.pnr "
-				+ " WHERE MNR LIKE '" + input + "' "
-				;
+		sql = "	   SELECT mitarbeit_projekt.mnr AS MNR, "
+			+ "       projekt.name AS Projektname, "
+			+ "       mitarbeit_projekt.prozent_arbzeit AS ProzentArbeitszeit "
+			+ "  FROM mitarbeit_projekt "
+			+ "       INNER JOIN "
+			+ "       projekt ON mitarbeit_projekt.pnr = projekt.pnr "
+			+ " WHERE MNR LIKE '" + input + "' "
+			;
 
 		rs = db.executeSelect(sql);
 		if (rs.next() == true) {
