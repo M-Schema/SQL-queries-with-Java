@@ -5,7 +5,7 @@ import java.sql.SQLException;
 import javax.swing.JOptionPane;
 
 /**
- * @version 2024-05-21
+ * @version 2024-05-22
  * @author Schema <github.com/M-Schema>
  */
 
@@ -20,33 +20,34 @@ public class G {
 		 */
 
 		DBHandler db;
-		db = new DBHandler("Mitarbeiter.db");
+		String input, sql;
+		ResultSet rs;
 		
-		String input = JOptionPane.showInputDialog("Projektnummer eingeben (1 oder 2)");
+		db = new DBHandler("Mitarbeiter.db");
+		input = JOptionPane.showInputDialog("Projektnummer eingeben (1 oder 2)");
 
-		String sql = "SELECT projekt.name AS Projektname, "
-				+ "       COUNT(mitarbeit_projekt.mnr) AS Mitarbeiteranzahl "
+		
+		sql = "SELECT projekt.pnr AS Projektnummer, "
+				+ "		  projekt.name AS Projektname, "
+				+ "       COUNT(mitarbeit_projekt.mnr) AS Mitarbeiterzahl "
 				+ "  FROM mitarbeit_projekt "
 				+ "       INNER JOIN "
 				+ "       projekt ON mitarbeit_projekt.pnr = projekt.pnr "
 				+ " WHERE projekt.pnr LIKE '" + input + "' "
-				+ " GROUP BY Projektname "
+				+ " GROUP BY Projektnummer "
 				;
 
-		ResultSet rs = db.executeSelect(sql);
-
-		if (rs.next() == false) {
-			System.out.println("Kein DS vorhanden");
-		} else {
-			System.out.println("Projektname \t Mitarbeiteranzahl");
-			System.out.println("======================================");
-
+		rs = db.executeSelect(sql);
+		if (rs.next() == true) {
 			do {
-				System.out.print(rs.getString("Projektname") + "\t ");
-				System.out.print(rs.getInt("Mitarbeiteranzahl") + "\t ");
+				System.out.print("Projektnummer: " + rs.getInt("Projektnummer") + "\n");
+				System.out.print("Projektname: " + rs.getString("Projektname") + "\n");
+				System.out.print("Anzahl Projektmitarbeiter: " + rs.getInt("Mitarbeiterzahl") + "\n");
 
-				System.out.print("\n\n");
+				System.out.print("\n");
 			} while (rs.next());
+		} else {
+			System.out.println("Kein DS vorhanden");
 		}
 
 		
@@ -59,25 +60,24 @@ public class G {
 				+ "       INNER JOIN "
 				+ "       mitarbeiter ON mitarbeit_projekt.mnr = mitarbeiter.mnr "
 				+ " WHERE projekt.pnr LIKE '" + input + "' "
-				+ " ORDER BY mitarbeit_projekt.mnr ASC"
+				+ " ORDER BY mitarbeit_projekt.mnr ASC "
 				; 
 
 		rs = db.executeSelect(sql);
-
-		if (rs.next() == false) {
-			System.out.println("Kein DS vorhanden");
-		} else {
+		if (rs.next() == true) {
 			System.out.println("MNR \t Nachname \t ProzentArbeitszeit");
 			System.out.println("======================================");
 
 			do {
-				System.out.print(rs.getString("MNR") + "\t");
-				System.out.print(rs.getString("Nachname") + "\t");
-				System.out.print(rs.getInt("ProzentArbeitszeit") + "\t");
+				System.out.print(rs.getString("MNR") + "    \t");
+				System.out.print(rs.getString("Nachname") + "    \t");
+				System.out.print(rs.getInt("ProzentArbeitszeit") + "     \t");
 
-				System.out.print("\n\n");
-			} while (rs.next());
+				System.out.print("\n");
+			} while (rs.next());	
+			
+		} else {
+			System.out.println("Kein DS vorhanden");
 		}
-
 	}
 }

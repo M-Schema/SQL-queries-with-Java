@@ -5,7 +5,7 @@ import java.sql.SQLException;
 import javax.swing.JOptionPane;
 
 /**
- * @version 2024-05-21
+ * @version 2024-05-22
  * @author Schema <github.com/M-Schema>
  */
 
@@ -18,11 +18,13 @@ public class H {
 		 */
 
 		DBHandler db;
-		db = new DBHandler("Mitarbeiter.db");
+		String input, sql;
+		ResultSet rs;
 		
-		String input = JOptionPane.showInputDialog("Mitarbeiternummer eingeben:");
+		db = new DBHandler("Mitarbeiter.db");
+		input = JOptionPane.showInputDialog("Mitarbeiternummer eingeben:");
 
-		String sql = "SELECT mitarbeit_projekt.mnr AS MNR, "
+		sql = "SELECT mitarbeit_projekt.mnr AS MNR, "
 				+ "       projekt.name AS Projektname, "
 				+ "       mitarbeit_projekt.prozent_arbzeit AS ProzentArbeitszeit "
 				+ "  FROM mitarbeit_projekt "
@@ -31,22 +33,17 @@ public class H {
 				+ " WHERE MNR LIKE '" + input + "' "
 				;
 
-		ResultSet rs = db.executeSelect(sql);
-
-		if (rs.next() == false) {
-			System.out.println("Kein DS vorhanden");
-		} else {
-			System.out.println("MNR \t Projektname \t ProzentArbeitszeit");
-			System.out.println("======================================");
-
+		rs = db.executeSelect(sql);
+		if (rs.next() == true) {
+			System.out.print("Mitarbeiter: " + rs.getInt("MNR") + "\n");
 			do {
-				System.out.print(rs.getInt("MNR") + "\t ");
-				System.out.print(rs.getString("Projektname") + "\t ");
-				System.out.print(rs.getInt("ProzentArbeitszeit") + "\t ");
+				System.out.print("Projektname: " + rs.getString("Projektname") + "; \t ");
+				System.out.print("Prozent Arbeitszeit: " + rs.getInt("ProzentArbeitszeit") + "\t ");
 
 				System.out.print("\n");
-			} while (rs.next());
+			} while (rs.next());		
+		} else {
+			System.out.println("Kein DS vorhanden");
 		}
-
 	}
 }
